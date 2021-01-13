@@ -35,10 +35,10 @@ with open(csv_path) as fd:
             continue
 
 
-        if idx < 5000:
-            continue
-        if idx > 5010:
-            break
+        #if idx < 5000:
+        #    continue
+        #if idx > 5010:
+        #    break
 
         if idx % 100 == 0:
             print('---- processing idx ', idx)
