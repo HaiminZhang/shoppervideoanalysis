@@ -7,17 +7,17 @@ import pdb
 
 from myutils import draw_rectangle, draw_circle
 
-from myutils import extract_frame
+from myutils import extract_from_baycsv
 
 
-rt_csvfolder = './csiro/redbullandv'
+rt_csvfolder = './csiro/SD1B2'
 rt_videos = './videos'
 
 csvfiles = glob.glob(os.path.join(rt_csvfolder, '*.csv'))
 csvfiles = sorted(csvfiles)
 
 for fn in csvfiles:
-    extract_frame(fn, rt_videos=rt_videos)
+    extract_from_baycsv(fn, rt_videos=rt_videos)
     
 
 #pdb.set_trace()

@@ -25,12 +25,13 @@ def draw_circle(img, pnt, radius=50, thickness=3):
 
     
 
-def extract_frame(csv_path, rt_videos='./videos', rt_fixation = './fixation_frames'):
+def extract_frame(csv_path, rt_videos='./videos', rt_dst = './fixation_frames'):
     #csv_path = './csiro/redbullandv/11.csv'
     #rt_videos = './videos'
     #rt_fixation = './fixation_frames'
 
     print('---- processing csv file ', csv_path)
+
 
     with open(csv_path) as fd:
         reader = csv.reader(fd)
@@ -46,6 +47,7 @@ def extract_frame(csv_path, rt_videos='./videos', rt_fixation = './fixation_fram
                 print('video does not exist ', path_video)
                 print('csv file ', csv_path)
                 return
+
 
             if idx == 1:
                 cap = cv2.VideoCapture(path_video)
@@ -64,5 +66,43 @@ def extract_frame(csv_path, rt_videos='./videos', rt_fixation = './fixation_fram
         #pdb.set_trace()
 
 
+def extract_from_baycsv(csv_path, rt_videos='./videos', rt_dst = './dst_frames'):
+    #csv_path = './csiro/redbullandv/11.csv'
+    #rt_videos = './videos'
+    #rt_fixation = './fixation_frames'
+
+    print('---- processing csv file ', csv_path)
+    if not os.path.exists(rt_dst):
+        #pdb.set_trace()
+        os.mkdirs(rt_dst)
+
+    with open(csv_path) as fd:
+        reader = csv.reader(fd)
+
+        for idx, row in enumerate(reader):
+            if idx == 0:
+                # skip the first row
+                continue
+
+            vidname = row[12]
+            path_video = os.path.join(rt_videos, vidname)
+            if not os.path.exists(path_video):
+                print('video does not exist ', path_video)
+                print('csv file ', csv_path)
+                return
+
+            if idx >= 1:
+                cap = cv2.VideoCapture(path_video)
+                assert(cap.get(5) == 25)
+
+            seq = int(row[5])
+            cap.set(1, seq)
+            ret, frame = cap.read()
+
+
+            fn = '_%06d.png' %seq
+            fn = vidname + fn 
+
+            cv2.imwrite(os.path.join(rt_dst, fn), frame)
 
 #extract_frame('')
